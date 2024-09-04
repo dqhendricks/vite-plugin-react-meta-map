@@ -73,6 +73,7 @@ function metaMapPlugin(options: MetaMapPluginOptions): Plugin {
       const { default: PageTemplate } = await import(pageTemplateUrl);
       const { pages } = await import(pageMetaMapUrl);
 
+      // cycle through page meta data and inject into PageTemplate component via props
       pages.forEach((page: React.ComponentProps<typeof PageTemplate>) => {
         let html = ReactDOMServer.renderToString(
           React.createElement(PageTemplate, page)
@@ -84,14 +85,26 @@ function metaMapPlugin(options: MetaMapPluginOptions): Plugin {
             `Error: The vite-plugin-react-meta-map's PageTemplate does not contain 'id="root"'. Ensure that the PageTemplate renders an element with id="root".`
           );
         }
+        // ensure that `page` contains `url` and `bundleEntryPoint` properties
+        if (!("url" in page)) {
+          throw new Error(
+            `Error: The vite-plugin-react-meta-map's pageMetaMap does not contain the "url" property. The "url" property is required to know each page's relative .html file path (ie: "index.html").`
+          );
+        }
+        if (!("bundleEntryPoint" in page)) {
+          throw new Error(
+            `Error: The vite-plugin-react-meta-map's pageMetaMap does not contain the "bundleEntryPoint" property. The "bundleEntryPoint" property is required to know which bundle entry file to load for each page (ie: "/src/main.tsx").`
+          );
+        }
 
-        // inject the correct assets into the head section
+        // inject the correct bundle assets into the head section
         const htmlStart = html.indexOf("</head>");
         const htmlBeforeHeadClose = html.slice(0, htmlStart);
         const htmlAfterHeadClose = html.slice(htmlStart);
 
         const assetTags: string[] = [];
 
+        let entryPointmatchFound = false;
         generatedEntryChunks.forEach((chunk) => {
           const isMatchingEntryPoint = Object.keys(chunk.modules).some(
             (modulePath) => {
@@ -102,6 +115,7 @@ function metaMapPlugin(options: MetaMapPluginOptions): Plugin {
             }
           );
           if (isMatchingEntryPoint) {
+            entryPointmatchFound = true;
             // include script tag for entry chunk
             assetTags.push(
               `<script type="module" crossorigin src="/${chunk.fileName}"></script>`
@@ -122,6 +136,12 @@ function metaMapPlugin(options: MetaMapPluginOptions): Plugin {
           }
         });
 
+        if (!entryPointmatchFound) {
+          throw new Error(
+            `Error: "bundleEntryPoint" set for ${page.url} in the vite-plugin-react-meta-map's pageMetaMap could not be found in the Vite bundle. Ensure that the "bundleEntryPoint" is set to an existing bundle entry point file (ie: "/src/main.tsx").`
+          );
+        }
+
         html = htmlBeforeHeadClose + assetTags.join("") + htmlAfterHeadClose;
 
         const filePath = path.join(resolvedOutputDir, page.url);
@@ -132,6 +152,7 @@ function metaMapPlugin(options: MetaMapPluginOptions): Plugin {
           fs.mkdirSync(directoryPath, { recursive: true });
         }
 
+        // create .html file
         fs.writeFileSync(filePath, `<!DOCTYPE html>${html}`, "utf8");
       });
 
