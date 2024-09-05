@@ -99,5 +99,5 @@ This will allow developers to further optimize their SEO and use Open Graph with
 3. Works with projects that use Vite config's rollup options to create multiple entry point files for their react project, though I have't created unit tests for this yet.
 4. Works with Typescript or Javascript.
 5. Not as convenient for sites that have numerous DB-generated pages, but tools can be made on a per-project basis that will generate the correct pageMetaMap file to allow for this to work as well.
-6. While this works great for web crawlers and open-graph social media links, it will not update the page title for in-app route changes (which may be visible at the top of some browsers). In-project logic will have to handle this in its routing logic if needed. 
+6. While this works great for web crawlers and open-graph social media links, it will not update the page title for in-app route changes (which may be visible at the top of some browsers). This will have to be handled in the in-project routing logic if needed.
 7. If you have ideas for contributions please get in touch.
