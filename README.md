@@ -24,16 +24,16 @@ export default defineConfig({
   plugins: [
     react(),
     metaMapPlugin({
-      pagesFilePath: "./src/reactMetaMap.ts",
+      pageMetaMapFilePath: "./src/pageMetaMap.ts",
       pageTemplateFilePath: "./src/PageTemplate.tsx",
     }),
   ],
 });
 ```
 
-###Example
+### Example
 
-1. Create a `reactMetaMap.ts` file with your page data:
+1. Create a `pageMetaMap.ts` file with your page data:
 
 ```typescript
 // you can add more to the PageMetaData type (such as Open Graph data) to be consumed by your PageTemplate component
@@ -56,7 +56,7 @@ export const pages: PageMetaData[] = [
 ];
 ```
 
-2. Create a `PageTemplate.tsx` file in your project:
+2. Create a `PageTemplate.tsx` file in your project that consumes your page meta data:
 
 ```typescript
 import React from "react";
@@ -80,7 +80,7 @@ const PageTemplate: React.FC<PageMetaData> = ({ title, description }) => {
 export default PageTemplate;
 ```
 
-And you're all set!
+And you're all set! Building the project will now generate the needed .html files based on your page meta data and page template files.
 
 ### Summary
 

@@ -1,7 +1,8 @@
 {
   "name": "vite-plugin-react-meta-map",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -10,10 +11,22 @@
     "README.md",
     "LICENSE"
   ],
+  "keywords": [
+    "vite",
+    "plugin",
+    "react",
+    "meta tags",
+    "open graph",
+    "seo"
+  ],
+  "author": "Dustin Hendricks",
+  "license": "MIT",
   "scripts": {
-    "build": "npm run clean && tsc",
-    "clean": "node clean.js",
-    "prepare": "npm run build"
+    "build": "npm run clean && tsc && npm run post",
+    "post": "node updateImportPaths.js",
+    "clean": "node cleanBuildFolder.js",
+    "prepare": "npm run build",
+    "test": "vitest --silent=false"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^17.0.0",
@@ -31,6 +44,7 @@
     "globals": "^15.9.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "^5.4.1",
+    "vitest": "^2.0.5"
   }
 }
