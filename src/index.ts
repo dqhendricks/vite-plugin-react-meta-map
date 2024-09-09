@@ -5,7 +5,7 @@ import {
   EntryChunkData,
   returnEntryChunkData,
   generateHtmlPages,
-} from "./metaMapPluginLogic";
+} from "./metaMapPluginLogic.js";
 
 interface MetaMapPluginOptions {
   pageTemplateFilePath: string;

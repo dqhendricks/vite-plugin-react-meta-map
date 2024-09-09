@@ -4,7 +4,7 @@ import { build } from "esbuild";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { OutputBundle } from "rollup";
-import * as fileUtils from "./fileUtils";
+import * as fileUtils from "./fileUtils.js";
 
 export interface EntryChunkData {
   fileName: string;

@@ -7,7 +7,6 @@ export function ensureDirExists(dirPath: string) {
 }
 
 export function writeFile(filePath: string, content: string) {
-  console.log("filewritten");
   fs.writeFileSync(filePath, content, "utf8");
 }
 
